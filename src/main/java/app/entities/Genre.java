@@ -1,0 +1,14 @@
+package app.entities;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+
+@Entity
+
+public class Genre {
+    @Id
+    @GeneratedValue
+    private int id;
+    private String name;
+}
