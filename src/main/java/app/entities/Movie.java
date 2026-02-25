@@ -1,23 +1,48 @@
 package app.entities;
 
 import jakarta.persistence.*;
+import lombok.*;
 
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
+@Getter
+@Setter
+@ToString
+@NoArgsConstructor
 
 public class Movie {
     @Id
-    @GeneratedValue
-    private int id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
     private String title;
     private String overview;
     private LocalDate releaseDate;
     private double rating;
-    private Set<Genre> genres;
-    private Set<Actor> actors;
+
+    @ManyToMany
+    private Set<Genre> genres = new HashSet<>();
+
+    @ManyToMany
+    private Set<Actor> actors  = new HashSet<>();
+
     @ManyToOne
-    @JoinColumn(name = "director_id")
     private Director director;
+
+    public Movie(String title, String overview, LocalDate releaseDate, double rating) {
+        this.title = title;
+        this.overview = overview;
+        this.releaseDate = releaseDate;
+        this.rating = rating;
+    }
+
+    public void addActor(Actor actor) {
+        this.actors.add(actor);
+    }
+
+    public void addGenre(Genre genre) {
+        this.genres.add(genre);
+    }
 }
