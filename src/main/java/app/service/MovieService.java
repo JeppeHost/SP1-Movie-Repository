@@ -5,6 +5,8 @@ import app.daos.ActorDAO;
 import app.daos.DirectorDAO;
 import app.daos.GenreDAO;
 import app.daos.MovieDAO;
+import app.dtos.ActorDTO;
+import app.dtos.GenreDTO;
 import app.dtos.MovieDTO;
 import app.entities.Actor;
 import app.entities.Director;
@@ -67,28 +69,24 @@ public class MovieService {
         Movie movie = new Movie();
         movie.setTitle(dto.getTitle());
         movie.setOverview(dto.getOverview());
-        movie.setVoteAverage(dto.getVoteAverage());
+        movie.setRating(dto.getVoteAverage());
         movie.setReleaseDate(dto.getReleaseDate());
         movie.setOriginalLanguage(dto.getOriginalLanguage());
 
         if (dto.getGenres() != null) {
-            List<Genre> genres = dto.getGenres().stream()
-                    .map(g -> {
-                        Genre genre = new Genre();
-                        genre.setName(g.getName());
-                        return genre;
-                    }).toList();
-            movie.setGenres(genres);
+            for (GenreDTO genredto : dto.getGenres()) {
+                Genre genre = new Genre();
+                genre.setName(genredto.getName());
+                movie.addGenre(genre);
+            }
         }
 
         if (dto.getCast() != null) {
-            List<Actor> actors = dto.getCast().stream()
-                    .map(a -> {
-                        Actor actor = new Actor();
-                        actor.setName(a.getName());
-                        return actor;
-                    }).toList();
-            movie.setActors(actors);
+            for (ActorDTO actordto : dto.getCast()) {
+                Actor actor = new Actor();
+                actor.setName(actordto.getName());
+                movie.addActor(actor);
+            }
         }
 
         if (dto.getDirector() != null) {

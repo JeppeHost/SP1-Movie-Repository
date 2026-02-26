@@ -21,6 +21,7 @@ public class Movie {
     private String overview;
     private LocalDate releaseDate;
     private double rating;
+    private String originalLanguage;
 
     @ManyToMany
     private Set<Genre> genres = new HashSet<>();
@@ -31,11 +32,12 @@ public class Movie {
     @ManyToOne
     private Director director;
 
-    public Movie(String title, String overview, LocalDate releaseDate, double rating) {
+    public Movie(String title, String overview, LocalDate releaseDate, double rating, String originalLanguage) {
         this.title = title;
         this.overview = overview;
         this.releaseDate = releaseDate;
         this.rating = rating;
+        this.originalLanguage = originalLanguage;
     }
 
     public void addActor(Actor actor) {
