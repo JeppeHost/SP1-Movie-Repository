@@ -25,11 +25,11 @@ public class MovieDTO {
     @JsonProperty("original_language")
     private String originalLanguage;
 
-    private List<app.dtos.GenreDTO> genres;
+    private List<GenreDTO> genres;
 
     private List<ActorDTO> cast;
 
-    private app.dtos.DirectorDTO director;
+    private DirectorDTO director;
 
     @Data
     @NoArgsConstructor
