@@ -56,4 +56,14 @@ public class DirectorDAO implements IDAO<Director> {
             em.getTransaction().commit();
         }
     }
+
+    public Director findByName(String name) {
+        try (EntityManager em = emf.createEntityManager()) {
+            List<Director> result = em.createQuery(
+                            "SELECT d FROM Director d WHERE d.name = :name", Director.class)
+                    .setParameter("name", name)
+                    .getResultList();
+            return result.isEmpty() ? null : result.get(0);
+        }
+    }
 }

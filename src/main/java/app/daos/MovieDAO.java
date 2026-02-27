@@ -31,7 +31,7 @@ public class MovieDAO implements IDAO<Movie> {
     public Movie save(Movie movie) {
         try (EntityManager em = emf.createEntityManager()) {
             em.getTransaction().begin();
-            em.persist(movie);
+            em.merge(movie);
             em.getTransaction().commit();
             return movie;
         }
@@ -57,24 +57,54 @@ public class MovieDAO implements IDAO<Movie> {
         }
     }
 
-    public List<Movie> findByRating(double minRating, double maxRating) {
+    public List<Movie> searchByTitle(String title) {
         try (EntityManager em = emf.createEntityManager()) {
-            return em.createQuery(
-                            "SELECT m FROM Movie m WHERE m.voteAverage >= :min AND m.voteAverage <= :max",
-                            Movie.class)
-                    .setParameter("min", minRating)
-                    .setParameter("max", maxRating)
+            List<Movie> movies = em.createQuery(
+                            "SELECT m FROM Movie m WHERE LOWER(m.title) LIKE LOWER(:title)", Movie.class)
+                    .setParameter("title", "%" + title + "%")
+                    .getResultList();
+            return movies;
+        }
+    }
+
+    public double getAverageRating() {
+        try (EntityManager em = emf.createEntityManager()) {
+            return em.createQuery("SELECT AVG(m.rating) FROM Movie m", Double.class)
+                    .getSingleResult();
+        }
+    }
+
+    public List<Movie> getTop10HighestRated() {
+        try (EntityManager em = emf.createEntityManager()) {
+            return em.createQuery("SELECT m FROM Movie m ORDER BY m.rating DESC", Movie.class)
+                    .setMaxResults(10)
+                    .getResultList();
+        }
+    }
+
+    public List<Movie> getTop10LowestRated() {
+        try (EntityManager em = emf.createEntityManager()) {
+            return em.createQuery("SELECT m FROM Movie m ORDER BY m.rating ASC", Movie.class)
+                    .setMaxResults(10)
+                    .getResultList();
+        }
+    }
+
+    public List<Movie> getTop10MostPopular() {
+        try (EntityManager em = emf.createEntityManager()) {
+            return em.createQuery("SELECT m FROM Movie m ORDER BY m.popularity DESC", Movie.class)
+                    .setMaxResults(10)
                     .getResultList();
         }
     }
 
     public List<Movie> findByGenre(String genreName) {
         try (EntityManager em = emf.createEntityManager()) {
-            return em.createQuery(
-                            "SELECT m FROM Movie m JOIN m.genres g WHERE g.name = :name",
-                            Movie.class)
+            List<Movie> movies = em.createQuery(
+                            "SELECT m FROM Movie m JOIN m.genres g WHERE g.name = :name", Movie.class)
                     .setParameter("name", genreName)
                     .getResultList();
+            return movies;
         }
     }
 }
