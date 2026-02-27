@@ -11,14 +11,18 @@ import java.util.Set;
 @Setter
 @ToString
 @NoArgsConstructor
-
+@EqualsAndHashCode(of = "name")
 public class Actor {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
+    @Column(nullable = false)
     private String name;
 
-    @ManyToMany
+    @ManyToMany(mappedBy = "actors")
+    @ToString.Exclude
     private Set<Movie> movies = new HashSet<>();
 
     public Actor(String name) {

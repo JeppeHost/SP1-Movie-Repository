@@ -12,31 +12,39 @@ import java.util.Set;
 @Setter
 @ToString
 @NoArgsConstructor
-
+@EqualsAndHashCode(of = "id")
 public class Movie {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Integer id;
+
+    @Column(nullable = false, unique = true)
     private String title;
+
+    @Column(columnDefinition = "TEXT")
     private String overview;
+
     private LocalDate releaseDate;
     private double rating;
+    private double popularity;
     private String originalLanguage;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.MERGE)
     private Set<Genre> genres = new HashSet<>();
 
-    @ManyToMany
-    private Set<Actor> actors  = new HashSet<>();
+    @ManyToMany(cascade = CascadeType.MERGE)
+    private Set<Actor> actors = new HashSet<>();
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.MERGE)
     private Director director;
 
-    public Movie(String title, String overview, LocalDate releaseDate, double rating, String originalLanguage) {
+    public Movie(String title, String overview, LocalDate releaseDate, double rating, double popularity, String originalLanguage) {
         this.title = title;
         this.overview = overview;
         this.releaseDate = releaseDate;
         this.rating = rating;
+        this.popularity = popularity;
         this.originalLanguage = originalLanguage;
     }
 
