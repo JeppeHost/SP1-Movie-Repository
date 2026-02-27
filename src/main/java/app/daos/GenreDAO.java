@@ -56,4 +56,14 @@ public class GenreDAO implements IDAO<Genre> {
             em.getTransaction().commit();
         }
     }
+
+    public Genre findByName(String name) {
+        try (EntityManager em = emf.createEntityManager()) {
+            List<Genre> result = em.createQuery(
+                            "SELECT g FROM Genre g WHERE g.name = :name", Genre.class)
+                    .setParameter("name", name)
+                    .getResultList();
+            return result.isEmpty() ? null : result.get(0);
+        }
+    }
 }
