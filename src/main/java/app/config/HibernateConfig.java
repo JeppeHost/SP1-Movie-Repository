@@ -103,6 +103,8 @@ public class HibernateConfig {
         props.put("hibernate.connection.url", "jdbc:postgresql://localhost:5432/" + DBName);
         props.put("hibernate.connection.username", DB_USERNAME);
         props.put("hibernate.connection.password", DB_PASSWORD);
+        System.out.println("DB_NAME=" + DBName);
+        System.out.println("JDBC URL=" + "jdbc:postgresql://localhost:5432/" + DBName);
         return props;
     }
 

@@ -47,9 +47,15 @@ public class MovieService {
         int page = 1;
 
         while (true) {
+            if (apiKey == null || apiKey.isBlank()) {
+                throw new IllegalStateException("API_KEY environment variable mangler. Sæt den i IntelliJ Run Config.");
+            }
             String json = fetch(BASE_URL + "/discover/movie?api_key=" + apiKey
                     + "&with_original_language=da&page=" + page);
             MovieDTO.PageResult response = objectMapper.readValue(json, MovieDTO.PageResult.class);
+            if (response.getResults() == null) {
+                throw new RuntimeException("TMDB response havde ingen 'results' (var det en error JSON?). Side: " + page);
+            }
             all.addAll(response.getResults());
             if (page >= response.getTotalPages()) break;
             page++;
@@ -61,6 +67,9 @@ public class MovieService {
         List<MovieDTO> movies = getDanishMovies();
         for (MovieDTO dto : movies) {
             Movie movie = toEntity(dto);
+            System.out.println("Title length: " + (movie.getTitle() == null ? 0 : movie.getTitle().length()));
+            System.out.println("Overview length: " + (movie.getOverview() == null ? 0 : movie.getOverview().length()));
+            System.out.println("Lang length: " + (movie.getOriginalLanguage() == null ? 0 : movie.getOriginalLanguage().length()));
             movieDAO.save(movie);
         }
     }
@@ -103,6 +112,17 @@ public class MovieService {
                 .uri(URI.create(url))
                 .GET()
                 .build();
-        return client.send(request, HttpResponse.BodyHandlers.ofString()).body();
+
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+        System.out.println("GET " + url);
+        System.out.println("Status: " + response.statusCode());
+        System.out.println("Body: " + response.body());
+
+        if (response.statusCode() >= 400) {
+            throw new RuntimeException("TMDB fejl " + response.statusCode() + ": " + response.body());
+        }
+
+        return response.body();
     }
 }

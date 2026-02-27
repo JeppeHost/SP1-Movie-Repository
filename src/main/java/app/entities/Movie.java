@@ -18,6 +18,8 @@ public class Movie {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String title;
+    @Lob
+    @Column(columnDefinition = "TEXT")
     private String overview;
     private LocalDate releaseDate;
     private double rating;
