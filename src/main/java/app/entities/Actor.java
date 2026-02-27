@@ -28,4 +28,8 @@ public class Actor {
     public Actor(String name) {
         this.name = name;
     }
+
+    public void addMovie(Movie movie) {
+        this.movies.add(movie);
+    }
 }
