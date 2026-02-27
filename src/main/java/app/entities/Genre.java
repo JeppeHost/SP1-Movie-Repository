@@ -28,4 +28,8 @@ public class Genre {
     public Genre(String name) {
         this.name = name;
     }
+
+    public void addMovie(Movie movie) {
+        this.movies.add(movie);
+    }
 }
