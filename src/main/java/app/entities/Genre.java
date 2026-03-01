@@ -11,25 +11,21 @@ import java.util.Set;
 @Setter
 @ToString
 @NoArgsConstructor
-@EqualsAndHashCode(of = "name")
+@EqualsAndHashCode(of = "id")
 public class Genre {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String name;
 
     @ManyToMany(mappedBy = "genres")
     @ToString.Exclude
     private Set<Movie> movies = new HashSet<>();
 
-    public Genre(String name) {
+    public Genre(Long id, String name) {
+        this.id = id;
         this.name = name;
-    }
-
-    public void addMovie(Movie movie) {
-        this.movies.add(movie);
     }
 }
