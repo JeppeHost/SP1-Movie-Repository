@@ -10,7 +10,6 @@ import java.util.Set;
 @Entity
 @Getter
 @Setter
-@ToString
 @NoArgsConstructor
 @EqualsAndHashCode(of = "id")
 public class Movie {

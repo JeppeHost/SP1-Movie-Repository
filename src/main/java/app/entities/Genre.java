@@ -9,7 +9,6 @@ import java.util.Set;
 @Entity
 @Getter
 @Setter
-@ToString
 @NoArgsConstructor
 @EqualsAndHashCode(of = "id")
 public class Genre {
@@ -21,7 +20,6 @@ public class Genre {
     private String name;
 
     @ManyToMany(mappedBy = "genres")
-    @ToString.Exclude
     private Set<Movie> movies = new HashSet<>();
 
     public Genre(Long id, String name) {
