@@ -11,12 +11,11 @@ import java.util.Set;
 @Setter
 @ToString
 @NoArgsConstructor
-@EqualsAndHashCode(of = "name")
+@EqualsAndHashCode(of = "id")
 public class Actor {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     @Column(nullable = false)
     private String name;
@@ -25,11 +24,8 @@ public class Actor {
     @ToString.Exclude
     private Set<Movie> movies = new HashSet<>();
 
-    public Actor(String name) {
+    public Actor(Long id, String name) {
+        this.id = id;
         this.name = name;
-    }
-
-    public void addMovie(Movie movie) {
-        this.movies.add(movie);
     }
 }

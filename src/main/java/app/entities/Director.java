@@ -11,26 +11,21 @@ import java.util.Set;
 @Setter
 @ToString
 @NoArgsConstructor
-
+@EqualsAndHashCode(of = "id")
 public class Director {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
+
     @Column(nullable = false)
     private String name;
 
-    @OneToMany(mappedBy = "director", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "director")
     @ToString.Exclude
     private Set<Movie> movies = new HashSet<>();
 
-    public Director(String name) {
+    public Director(Long id, String name) {
+        this.id = id;
         this.name = name;
-    }
-
-    public void addMovie(Movie movie) {
-        this.movie.add(movie);
-        if (movie != null) {
-            movie.setDirector(this);
-        }
     }
 }
