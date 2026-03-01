@@ -56,14 +56,4 @@ public class ActorDAO implements IDAO<Actor> {
             em.getTransaction().commit();
         }
     }
-
-    public Actor findByName(String name) {
-        try (EntityManager em = emf.createEntityManager()) {
-            List<Actor> result = em.createQuery(
-                            "SELECT a FROM Actor a WHERE a.name = :name", Actor.class)
-                    .setParameter("name", name)
-                    .getResultList();
-            return result.isEmpty() ? null : result.get(0);
-        }
-    }
 }

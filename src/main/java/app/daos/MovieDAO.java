@@ -31,7 +31,7 @@ public class MovieDAO implements IDAO<Movie> {
     public Movie save(Movie movie) {
         try (EntityManager em = emf.createEntityManager()) {
             em.getTransaction().begin();
-            em.merge(movie);
+            em.persist(movie);
             em.getTransaction().commit();
             return movie;
         }
@@ -59,18 +59,19 @@ public class MovieDAO implements IDAO<Movie> {
 
     public List<Movie> searchByTitle(String title) {
         try (EntityManager em = emf.createEntityManager()) {
-            List<Movie> movies = em.createQuery(
-                            "SELECT m FROM Movie m WHERE LOWER(m.title) LIKE LOWER(:title)", Movie.class)
+            return em.createQuery(
+                            "SELECT m FROM Movie m WHERE LOWER(m.title) LIKE LOWER(:title)",
+                            Movie.class)
                     .setParameter("title", "%" + title + "%")
                     .getResultList();
-            return movies;
         }
     }
 
     public double getAverageRating() {
         try (EntityManager em = emf.createEntityManager()) {
-            return em.createQuery("SELECT AVG(m.rating) FROM Movie m", Double.class)
+            Double result = em.createQuery("SELECT AVG(m.rating) FROM Movie m", Double.class)
                     .getSingleResult();
+            return result != null ? result : 0.0;
         }
     }
 
@@ -98,13 +99,13 @@ public class MovieDAO implements IDAO<Movie> {
         }
     }
 
-    public List<Movie> findByGenre(String genreName) {
+    public List<Movie> findByGenreId(Long genreId) {
         try (EntityManager em = emf.createEntityManager()) {
-            List<Movie> movies = em.createQuery(
-                            "SELECT m FROM Movie m JOIN m.genres g WHERE g.name = :name", Movie.class)
-                    .setParameter("name", genreName)
+            return em.createQuery(
+                            "SELECT m FROM Movie m JOIN m.genres g WHERE g.id = :id",
+                            Movie.class)
+                    .setParameter("id", genreId)
                     .getResultList();
-            return movies;
         }
     }
 }
