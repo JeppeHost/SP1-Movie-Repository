@@ -14,7 +14,6 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.LocalDate;
 import java.time.Year;
-import java.util.ArrayList;
 import java.util.List;
 
 public class MovieService {
@@ -31,6 +30,10 @@ public class MovieService {
     private final GenreDAO genreDAO = new GenreDAO(emf);
     private final DirectorDAO directorDAO = new DirectorDAO(emf);
 
+    public MovieService() {
+        if (apiKey == null) throw new IllegalStateException("API_KEY environment variable not set");
+    }
+
     public void fetchAndStoreDanishMoviesLast5Years() throws Exception {
 
         List<GenreDTO> apiGenres = fetchAllGenres();
@@ -42,12 +45,9 @@ public class MovieService {
 
         int currentYear = Year.now().getValue();
         int startYear = currentYear - 5;
-
         int page = 1;
-        String fiveYearsAgo = LocalDate.now().minusYears(5).toString();
 
         while (true) {
-
             String url = BASE_URL + "/discover/movie"
                     + "?api_key=" + apiKey
                     + "&with_original_language=da"
@@ -59,7 +59,11 @@ public class MovieService {
             MovieDTO.PageResult result = mapper.readValue(json, MovieDTO.PageResult.class);
 
             for (MovieDTO dto : result.getResults()) {
-                processAndStoreMovie(dto);
+                try {
+                    processAndStoreMovie(dto);
+                } catch (Exception e) {
+                    System.err.println("Failed to process movie " + dto.getId() + ": " + e.getMessage());
+                }
             }
 
             if (page >= result.getTotalPages()) break;
@@ -69,9 +73,7 @@ public class MovieService {
 
     private void processAndStoreMovie(MovieDTO dto) throws Exception {
 
-        if (movieDAO.findById(dto.getId()) != null) {
-            return;
-        }
+        if (movieDAO.findById(dto.getId()) != null) return;
 
         Movie movie = new Movie(
                 dto.getId(),
@@ -85,15 +87,12 @@ public class MovieService {
 
         for (Long genreId : dto.getGenreIds()) {
             Genre genre = genreDAO.findById(genreId);
-            if (genre != null) {
-                movie.getGenres().add(genre);
-            }
+            if (genre != null) movie.getGenres().add(genre);
         }
 
         CreditsDTO credits = fetchCredits(dto.getId());
 
         for (CreditsDTO.CastMemberDTO cast : credits.getCast()) {
-
             Actor actor = actorDAO.findById(cast.getId());
             if (actor == null) {
                 actor = new Actor(cast.getId(), cast.getName());
@@ -104,7 +103,6 @@ public class MovieService {
 
         for (CreditsDTO.CrewMemberDTO crew : credits.getCrew()) {
             if ("Director".equalsIgnoreCase(crew.getJob())) {
-
                 Director director = directorDAO.findById(crew.getId());
                 if (director == null) {
                     director = new Director(crew.getId(), crew.getName());
