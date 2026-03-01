@@ -12,13 +12,14 @@ import java.util.Set;
 @Setter
 @ToString
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 
 public class Movie {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String title;
-    @Lob
     @Column(columnDefinition = "TEXT")
     private String overview;
     private LocalDate releaseDate;
@@ -41,6 +42,7 @@ public class Movie {
         this.rating = rating;
         this.originalLanguage = originalLanguage;
     }
+
 
     public void addActor(Actor actor) {
         this.actors.add(actor);

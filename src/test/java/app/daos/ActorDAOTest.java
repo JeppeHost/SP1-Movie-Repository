@@ -102,8 +102,5 @@ class ActorDAOTest {
 
         //Assert
         assertThat(actorDAO.findById(1), is(nullValue()));
-
-
-
     }
 }
