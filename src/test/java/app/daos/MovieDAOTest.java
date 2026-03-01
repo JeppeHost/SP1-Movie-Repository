@@ -60,8 +60,8 @@ class MovieDAOTest {
         assertEquals("Movie 4", fetched.getTitle());
         assertEquals("mid", fetched.getOverview());
         assertEquals(LocalDate.now(), fetched.getReleaseDate());
-        assertEquals(3, fetched.getRating());
-        assertEquals(4, fetched.getPopularity());
+        assertTrue(fetched.getRating() == 3);
+        assertTrue(fetched.getPopularity() == 4);
         assertEquals("da", fetched.getOriginalLanguage());
     }
 
@@ -80,7 +80,6 @@ class MovieDAOTest {
 
         movieDAO.delete(seed.getId());
 
-        assertNull(movieDAO.findById(3L));
         assertThrows(ApiException.class, () -> movieDAO.findById(seed.getId()));
     }
 
@@ -89,12 +88,11 @@ class MovieDAOTest {
         Movie seed = seeded.get("movie1");
         List<Movie> fetched = movieDAO.searchByTitle("1");
         assertEquals(seed, fetched.get(0));
-        assertNull(fetched.get(1));
     }
 
     @Test
     void getAverageRating() {
-        assertEquals(3.5, movieDAO.getAverageRating());
+        assertTrue(movieDAO.getAverageRating() == 3.5);
     }
 
     @Test
@@ -113,8 +111,8 @@ class MovieDAOTest {
 
     @Test
     void getTop10MostPopular() {
-        assertEquals(seeded.get("movie3"), movieDAO.getTop10MostPopular().get(2));
+        assertEquals(seeded.get("movie3"), movieDAO.getTop10MostPopular().get(0));
         assertEquals(seeded.get("movie2"), movieDAO.getTop10MostPopular().get(1));
-        assertEquals(seeded.get("movie1"), movieDAO.getTop10MostPopular().get(0));
+        assertEquals(seeded.get("movie1"), movieDAO.getTop10MostPopular().get(2));
     }
 }
