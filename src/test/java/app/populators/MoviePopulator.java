@@ -1,6 +1,5 @@
 package app.populators;
 
-import app.entities.Actor;
 import app.entities.Movie;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;

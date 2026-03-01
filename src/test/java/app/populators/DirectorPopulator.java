@@ -1,6 +1,6 @@
 package app.populators;
 
-import app.entities.Genre;
+import app.entities.Director;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 
@@ -9,19 +9,19 @@ import jakarta.persistence.PersistenceException;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public final class GenrePopulator {
+public final class DirectorPopulator {
 
-    private GenrePopulator() {}
+    private DirectorPopulator() {}
 
-    public static Map<String, Genre> populate(EntityManagerFactory emf) {
+    public static Map<String, Director> populate(EntityManagerFactory emf) {
         try (EntityManager em = emf.createEntityManager()) {
 
             em.getTransaction().begin();
-            Genre genre1 = new Genre("Action");
+            Director director1 = new Director("Martin Scorsese");
 
             try {
-                em.createNativeQuery("TRUNCATE TABLE genre RESTART IDENTITY CASCADE").executeUpdate();
-                em.persist(genre1);
+                em.createNativeQuery("TRUNCATE TABLE director RESTART IDENTITY CASCADE").executeUpdate();
+                em.persist(director1);
                 em.flush();
             } catch (PersistenceException e) {
                 if (em.getTransaction().isActive()) em.getTransaction().rollback();
@@ -29,8 +29,8 @@ public final class GenrePopulator {
             }
             em.getTransaction().commit();
 
-            Map<String, Genre> seeded = new LinkedHashMap<>();
-            seeded.put("genre1", genre1);
+            Map<String, Director> seeded = new LinkedHashMap<>();
+            seeded.put("director1", director1);
             return seeded;
         }
     }
