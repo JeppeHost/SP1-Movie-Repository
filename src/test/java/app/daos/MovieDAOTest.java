@@ -5,21 +5,13 @@ import app.entities.Movie;
 import app.exceptions.ApiException;
 import app.testutils.MovieTestPopulator;
 import jakarta.persistence.EntityManagerFactory;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.*;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.assertThrows;
-import static org.testcontainers.shaded.org.hamcrest.Matchers.containsInAnyOrder;
-import static org.testcontainers.shaded.org.hamcrest.Matchers.hasSize;
+import static org.junit.Assert.*;
 
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -45,32 +37,32 @@ class MovieDAOTest {
     void findById() {
         Movie seed = seeded.get("movie1");
         Movie fetched = movieDAO.findById(seed.getId());
-        assertThat(fetched.getId(), is(seed.getId()));
-        assertThat(fetched.getTitle(), is(seed.getTitle()));
+        assertEquals(seed.getId(), fetched.getId());
+        assertEquals(seed.getTitle(), fetched.getTitle());
     }
 
     @Test
     void findAll() {
         List<Movie> all = movieDAO.findAll();
-        assertThat(all, hasSize(3));
-        assertThat(all, containsInAnyOrder(seeded.get("movie1"), seeded.get("movie2"), seeded.get("movie3")));
+        assertEquals(seeded.get("movie1"), all.get(0));
+        assertEquals(seeded.get("movie2"), all.get(1));
+        assertEquals(seeded.get("movie3"), all.get(2));
     }
 
     @Test
     void save() {
-        Movie movie = new Movie(4L, "Movie 4", "mid", LocalDate.now(), 3.0, 400, "da");
+        Movie movie = new Movie(4L, "Movie 4", "mid", LocalDate.now(), 3.0, 4, "da");
 
         Movie created = movieDAO.save(movie);
 
-        assertThat(created.getId(), notNullValue());
+        assertNotNull(created.getId());
         Movie fetched = movieDAO.findById(created.getId());
-        assertThat(fetched.getId(), is(4));
-        assertThat(fetched.getTitle(), is("Movie 4"));
-        assertThat(fetched.getOverview(), is("mid"));
-        assertThat(fetched.getReleaseDate(), is(LocalDate.now()));
-        assertThat(fetched.getRating(), is(3));
-        assertThat(fetched.getPopularity(), is(400));
-        assertThat(fetched.getOriginalLanguage(), is("da"));
+        assertEquals("Movie 4", fetched.getTitle());
+        assertEquals("mid", fetched.getOverview());
+        assertEquals(LocalDate.now(), fetched.getReleaseDate());
+        assertEquals(3, fetched.getRating());
+        assertEquals(4, fetched.getPopularity());
+        assertEquals("da", fetched.getOriginalLanguage());
     }
 
     @Test
@@ -79,7 +71,7 @@ class MovieDAOTest {
         seed.setTitle("Updated Title");
         movieDAO.update(seed);
 
-        assertThat(movieDAO.findById(2L).getTitle(), is("Updated Title"));
+        assertEquals("Updated Title", movieDAO.findById(2L).getTitle());
     }
 
     @Test
@@ -88,30 +80,41 @@ class MovieDAOTest {
 
         movieDAO.delete(seed.getId());
 
+        assertNull(movieDAO.findById(3L));
         assertThrows(ApiException.class, () -> movieDAO.findById(seed.getId()));
     }
 
     @Test
     void searchByTitle() {
+        Movie seed = seeded.get("movie1");
+        List<Movie> fetched = movieDAO.searchByTitle("1");
+        assertEquals(seed, fetched.get(0));
+        assertNull(fetched.get(1));
     }
 
     @Test
     void getAverageRating() {
+        assertEquals(3.5, movieDAO.getAverageRating());
     }
 
     @Test
     void getTop10HighestRated() {
+        assertEquals(seeded.get("movie1"), movieDAO.getTop10HighestRated().get(0));
+        assertEquals(seeded.get("movie2"), movieDAO.getTop10HighestRated().get(1));
+        assertEquals(seeded.get("movie3"), movieDAO.getTop10HighestRated().get(2));
     }
 
     @Test
     void getTop10LowestRated() {
+        assertEquals(seeded.get("movie3"), movieDAO.getTop10LowestRated().get(0));
+        assertEquals(seeded.get("movie2"), movieDAO.getTop10LowestRated().get(1));
+        assertEquals(seeded.get("movie1"), movieDAO.getTop10LowestRated().get(2));
     }
 
     @Test
     void getTop10MostPopular() {
-    }
-
-    @Test
-    void findByGenreId() {
+        assertEquals(seeded.get("movie3"), movieDAO.getTop10MostPopular().get(2));
+        assertEquals(seeded.get("movie2"), movieDAO.getTop10MostPopular().get(1));
+        assertEquals(seeded.get("movie1"), movieDAO.getTop10MostPopular().get(0));
     }
 }
