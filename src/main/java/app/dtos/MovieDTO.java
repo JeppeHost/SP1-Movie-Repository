@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 import java.time.LocalDate;
 import java.util.List;
 
@@ -21,20 +22,19 @@ public class MovieDTO {
 
     @JsonProperty("vote_average")
     private double voteAverage;
+    private double popularity;
 
     @JsonProperty("original_language")
     private String originalLanguage;
 
-    private List<GenreDTO> genres;
-
-    private List<ActorDTO> cast;
-
-    private DirectorDTO director;
+    @JsonProperty("genre_ids")
+    private List<Long> genreIds;
 
     @Data
     @NoArgsConstructor
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class PageResult {
+
         private List<MovieDTO> results;
 
         @JsonProperty("total_pages")
