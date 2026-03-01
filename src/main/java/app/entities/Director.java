@@ -9,7 +9,6 @@ import java.util.Set;
 @Entity
 @Getter
 @Setter
-@ToString
 @NoArgsConstructor
 @EqualsAndHashCode(of = "id")
 public class Director {
@@ -21,7 +20,6 @@ public class Director {
     private String name;
 
     @OneToMany(mappedBy = "director")
-    @ToString.Exclude
     private Set<Movie> movies = new HashSet<>();
 
     public Director(Long id, String name) {
