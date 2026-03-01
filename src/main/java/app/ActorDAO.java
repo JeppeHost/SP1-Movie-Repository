@@ -1,4 +1,4 @@
-package app.daos;
+package app;
 
 import app.entities.Actor;
 import jakarta.persistence.EntityManager;
@@ -14,7 +14,7 @@ public class ActorDAO implements IDAO<Actor> {
     }
 
     @Override
-    public Actor findById(Long id) {
+    public Actor findById(Integer id) {
         try (EntityManager em = emf.createEntityManager()) {
             return em.find(Actor.class, id);
         }
@@ -48,7 +48,7 @@ public class ActorDAO implements IDAO<Actor> {
     }
 
     @Override
-    public void delete(Long id) {
+    public void delete(Integer id) {
         try (EntityManager em = emf.createEntityManager()) {
             em.getTransaction().begin();
             Actor actor = em.find(Actor.class, id);

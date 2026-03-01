@@ -1,11 +1,11 @@
-package app.daos;
+package app;
 
 import java.util.List;
 
 public interface IDAO<T> {
-    T findById(Long id);
+    T findById(Integer id);
     List<T> findAll();
     T save(T t);
     T update(T t);
-    void delete(Long id);
+    void delete(Integer id);
 }

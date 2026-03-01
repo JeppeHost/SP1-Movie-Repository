@@ -1,4 +1,4 @@
-package app.daos;
+package app;
 
 import app.entities.Movie;
 import jakarta.persistence.EntityManager;
@@ -14,7 +14,7 @@ public class MovieDAO implements IDAO<Movie> {
     }
 
     @Override
-    public Movie findById(Long id) {
+    public Movie findById(Integer id) {
         try (EntityManager em = emf.createEntityManager()) {
             return em.find(Movie.class, id);
         }
@@ -48,7 +48,7 @@ public class MovieDAO implements IDAO<Movie> {
     }
 
     @Override
-    public void delete(Long id) {
+    public void delete(Integer id) {
         try (EntityManager em = emf.createEntityManager()) {
             em.getTransaction().begin();
             Movie movie = em.find(Movie.class, id);

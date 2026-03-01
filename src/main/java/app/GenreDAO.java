@@ -1,4 +1,4 @@
-package app.daos;
+package app;
 
 import app.entities.Genre;
 import jakarta.persistence.EntityManager;
@@ -14,7 +14,7 @@ public class GenreDAO implements IDAO<Genre> {
     }
 
     @Override
-    public Genre findById(Long id) {
+    public Genre findById(Integer id) {
         try (EntityManager em = emf.createEntityManager()) {
             return em.find(Genre.class, id);
         }
@@ -48,7 +48,7 @@ public class GenreDAO implements IDAO<Genre> {
     }
 
     @Override
-    public void delete(Long id) {
+    public void delete(Integer id) {
         try (EntityManager em = emf.createEntityManager()) {
             em.getTransaction().begin();
             Genre genre = em.find(Genre.class, id);

@@ -1,4 +1,4 @@
-package app.daos;
+package app;
 
 import app.entities.Director;
 import jakarta.persistence.EntityManager;
@@ -14,7 +14,7 @@ public class DirectorDAO implements IDAO<Director> {
     }
 
     @Override
-    public Director findById(Long id) {
+    public Director findById(Integer id) {
         try (EntityManager em = emf.createEntityManager()) {
             return em.find(Director.class, id);
         }
@@ -48,7 +48,7 @@ public class DirectorDAO implements IDAO<Director> {
     }
 
     @Override
-    public void delete(Long id) {
+    public void delete(Integer id) {
         try (EntityManager em = emf.createEntityManager()) {
             em.getTransaction().begin();
             Director director = em.find(Director.class, id);

@@ -1,10 +1,10 @@
-package app.service;
+/*package app.service;
 
 import app.config.HibernateConfig;
-import app.daos.ActorDAO;
-import app.daos.DirectorDAO;
-import app.daos.GenreDAO;
-import app.daos.MovieDAO;
+import app.ActorDAO;
+import app.DirectorDAO;
+import app.GenreDAO;
+import app.MovieDAO;
 import app.dtos.ActorDTO;
 import app.dtos.GenreDTO;
 import app.dtos.MovieDTO;
@@ -125,4 +125,4 @@ public class MovieService {
 
         return response.body();
     }
-}
+}*/
