@@ -18,9 +18,9 @@ public final class MovieTestPopulator {
 
             em.getTransaction().begin();
             LocalDate baseDate = LocalDate.of(2028,2,1);
-            Movie movie1 = new Movie(1L, "Movie 1", "good", baseDate.plusDays(1), 4.5, 100, "da");
-            Movie movie2 = new Movie(2L, "Movie 2", "ok", baseDate.plusDays(2), 3.5, 200, "en");
-            Movie movie3 = new Movie(3L, "Movie 3", "bad", baseDate.plusDays(3), 2.0, 300, "ja");
+            Movie movie1 = new Movie(1L, "Movie 1", "good", baseDate.plusDays(1), 4.5, 1, "da");
+            Movie movie2 = new Movie(2L, "Movie 2", "ok", baseDate.plusDays(2), 3.5, 2, "en");
+            Movie movie3 = new Movie(3L, "Movie 3", "bad", baseDate.plusDays(3), 2.5, 3, "ja");
 
             try {
                 em.createNativeQuery("TRUNCATE TABLE movie RESTART IDENTITY CASCADE").executeUpdate();
