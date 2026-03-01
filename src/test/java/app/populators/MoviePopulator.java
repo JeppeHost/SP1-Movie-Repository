@@ -16,6 +16,7 @@ public final class MoviePopulator {
     private MoviePopulator() {}
 
     public static Map<String, Movie> populate(EntityManagerFactory emf) {
+
         try (EntityManager em = emf.createEntityManager()) {
 
             em.getTransaction().begin();
