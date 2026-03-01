@@ -44,6 +44,7 @@ public class MovieService {
         int startYear = currentYear - 5;
 
         int page = 1;
+        String fiveYearsAgo = LocalDate.now().minusYears(5).toString();
 
         while (true) {
 
