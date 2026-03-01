@@ -81,14 +81,19 @@ class ActorDAOTest {
     @Test
     void update() {
 
-        //Arrange
-        Actor actorToUpdate = new Actor("Tom Hanks");
+        // Arrange
+        Actor actor = new Actor("Tom Hanks");
+        Actor created = actorDAO.save(actor);
+        int id = created.getId();
 
-        //Act
-        actorToUpdate = actorDAO.update(actorToUpdate);
+        // Act
+        created.setName("Jim Carrey");
+        Actor updatedActor = actorDAO.update(created);
 
-        //Assert
-
+        // Assert
+        assertThat(updatedActor, notNullValue());
+        assertThat(updatedActor.getName(), is("Jim Carrey"));
+        assertThat(updatedActor.getId(), is(id));
     }
 
     @Test
